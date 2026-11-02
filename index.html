@@ -296,9 +296,9 @@ const UI = {
   accept:"Accept", decline:"Decline", callBtn:"Call",
   whoIn:"Shareholder", whoOut:"Business (prospect)",
   live:"LIVE CALL", aiC:"AI customer", you:"You (OP)",
-  notes:"Notes", saving:"Saving…", saved:"✓ Saved automatically", transcript:"Transcript",
+  notes:"Your notes (OP)", saving:"Saving…", saved:"✓ Saved automatically", transcript:"Transcript",
   ended:"Call ended", endBtn:"Call ended? Write summary & save →", endHint:"End the call first. Your notes go to the summary page.",
-  sum:"Summary: how the practice call went", todo:"To-do list", acw:"After-call work", notesCall:"Notes from the call", save:"Save call", savedBy:"✓ Saved by trainee · 09:17",
+  sum:"Summary: how the practice call went", todo:"To-do list", acw:"After-call work", notesCall:"Your notes from the call", save:"Save call", savedBy:"✓ Saved by trainee · 09:17",
   recent:"Recent calls", newT:"New", sumL:"Summary", todoL:"To-do",
  },
  ja: {
@@ -322,9 +322,9 @@ const UI = {
   accept:"応答", decline:"拒否", callBtn:"発信",
   whoIn:"株主様", whoOut:"法人のお客様（見込み客）",
   live:"通話中", aiC:"AIのお客様", you:"あなた（OP）",
-  notes:"メモ", saving:"保存中…", saved:"✓ 自動保存済み", transcript:"文字起こし",
+  notes:"あなたのメモ（OP）", saving:"保存中…", saved:"✓ 自動保存済み", transcript:"文字起こし",
   ended:"通話が終了しました", endBtn:"通話が終わったら：要約を書いて保存 →", endHint:"先に通話を終了してください。メモは要約ページに引き継がれます。",
-  sum:"要約（練習通話の振り返り）", todo:"ToDoリスト", acw:"通話後の作業", notesCall:"通話中のメモ", save:"通話を保存", savedBy:"✓ 研修生が保存 · 09:17",
+  sum:"要約（練習通話の振り返り）", todo:"ToDoリスト", acw:"通話後の作業", notesCall:"通話中のあなたのメモ", save:"通話を保存", savedBy:"✓ 研修生が保存 · 09:17",
   recent:"最近の通話", newT:"新規", sumL:"要約", todoL:"ToDo",
  }
 };
@@ -333,13 +333,13 @@ const DATA = {
  inbound: {
   en: { call:"Shareholder benefits help desk", dur:"03:12",
     turns:[["t","Hello, shareholder benefits help desk. How may I help you?"],["c","My peaches arrived, but they were rotten. Can I exchange them?"],["t","I'm sorry about that. How many of them are rotten?"],["c","Two out of the ten."],["t","Could you keep them for now and send a photo by email? I'll check the order and call you back."],["c","All right. Please call me back, but not in the mornings."]],
-    notesLines:[[1,"Peaches arrived rotten, wants an exchange"],[3,"2 of 10 rotten"],[4,"Keep the item, photos by email, check order, call back"],[5,"Callback: afternoon only"]],
+    notesLines:[[1,"Caller: peaches arrived rotten, wants an exchange"],[3,"Asked how many: 2 of 10 rotten"],[4,"Asked them to keep the item and send photos by email. I will check the order and call back"],[5,"Callback: afternoon only (not mornings)"]],
     summary:"Practice call with the AI shareholder (damaged item). The customer said 2 of 10 peaches arrived rotten. I asked how many, asked them to keep the item and send photos, and promised a callback. To improve: confirm the delivery address and read back the order date.",
     todos:["Call the customer back this afternoon (practice follow-up)","Re-read the damaged-item section of the FAQ","Practise again and confirm the address before closing"],
     older:[["Outbound call · Internet / fiber sales","11/01 · 02:48"],["Inbound call · Shareholder benefits help desk","10/31 · 04:05"]] },
   ja: { call:"株主優待ヘルプデスク", dur:"03:12",
     turns:[["t","お電話ありがとうございます。株主優待ヘルプデスクでございます。"],["c","桃が届いたんですけど、腐ってたんです。交換できますか？"],["t","申し訳ございません。傷んでいたのは何個ですか？"],["c","10個のうち2個です。"],["t","いったん手元に残していただき、写真をメールでお送りいただけますか。ご注文を確認して折り返しご連絡します。"],["c","分かりました。折り返しはお願いしますけど、午前中は出られないんです。"]],
-    notesLines:[[1,"桃が傷んで届いた。交換希望"],[3,"10個中2個が傷み"],[4,"現物は保管・写真をメールで・注文確認・折り返し"],[5,"折り返しは午後のみ"]],
+    notesLines:[[1,"お客様：桃が傷んで届いた。交換希望"],[3,"傷んだ個数を確認：10個中2個"],[4,"現物の保管と写真のメール送付を依頼。注文を確認して折り返す"],[5,"折り返しは午後のみ（午前は不可）"]],
     summary:"AIの株主様との練習通話（商品不備）。桃10個のうち2個が傷んでいるとのこと。傷んだ個数を確認し、現物の保管と写真のメール送付をお願いして、折り返しを約束しました。改善点：お届け先住所の確認と、注文日の復唱。",
     todos:["今日の午後にお客様へ折り返し（練習のフォローアップ）","FAQの「商品不備」の項目を読み直す","もう一度練習し、通話を終える前に住所を確認する"],
     older:[["アウトバウンド通話 · インターネット／光回線の営業","11/01 · 02:48"],["インバウンド通話 · 株主優待ヘルプデスク","10/31 · 04:05"]] }
@@ -347,13 +347,13 @@ const DATA = {
  outbound: {
   en: { call:"Internet / fiber sales", dur:"03:12",
     turns:[["c","Hello, Midori Seisakusho."],["t","Hello, this is Tanaka from Sakura Telecom. Is the person in charge of telecom available?"],["c","Hello, this is Suzuki from General Affairs. We're fine for now, no problems."],["t","I understand. This isn't about switching, just a short greeting from our regional representative. Are you on 1G today?"],["c","Yes, about 7,400 yen a month including the provider."],["t","Our fiber runs on our own network, so we can compare. Would Tuesday or Thursday suit you?"],["c","All right. Tuesday, then."]],
-    notesLines:[[2,"Suzuki, General Affairs. \"Fine for now\""],[4,"1G, about 7,400 yen/month incl. ISP"],[6,"Visit booked: Tuesday"]],
+    notesLines:[[2,"Reached Suzuki (General Affairs). Objection: \"fine for now\""],[4,"Asked about their line: 1G, about 7,400 yen/month incl. ISP"],[6,"Booked a visit for Tuesday. Still to ask: recent bill, address"]],
     summary:"Practice call with the AI prospect (General Affairs). They said they were fine with their current line. I acknowledged it, said it was only a greeting, asked about their line and offered two dates; they chose Tuesday. To improve: ask for a recent bill and confirm the address before closing.",
     todos:["Confirm the Tuesday visit: address and a recent bill","Re-read the handbook page on \"no need to review\" objections","Practise again with a harder prospect (hang-up or \"we have a partner\")"],
     older:[["Inbound call · Shareholder benefits help desk","11/01 · 04:20"],["Outbound call · Internet / fiber sales","10/31 · 01:55"]] },
   ja: { call:"インターネット／光回線の営業", dur:"03:12",
     turns:[["c","はい、みどり製作所です。"],["t","お世話になっております。サクラ通信の田中と申します。通信関係のご担当者様はいらっしゃいますか？"],["c","お電話代わりました、総務の鈴木です。今のところ特に困ってないので、大丈夫です。"],["t","そうですよね。切り替えのお話ではなく、地域担当からの簡単なご挨拶です。ちなみに今は1ギガでしょうか？"],["c","ええ、プロバイダ込みで月7,400円くらいです。"],["t","弊社の光は独自回線ですので、今のご契約と比較できます。火曜と木曜なら、どちらがよろしいでしょうか？"],["c","分かりました。じゃあ、火曜で。"]],
-    notesLines:[[2,"総務の鈴木様。「今は大丈夫」"],[4,"1G・ISP込みで月7,400円ほど"],[6,"訪問アポ：火曜"]],
+    notesLines:[[2,"総務の鈴木様につながる。断り文句：「今は大丈夫」"],[4,"回線を質問：1G・ISP込みで月7,400円ほど"],[6,"火曜の訪問を獲得。未確認：直近の請求書・住所"]],
     summary:"AIの見込み客（総務ご担当）との練習通話。現在の回線に不満はないとのことでした。一度受け止めたうえで、ご挨拶だけであることを伝え、回線について質問し、日程を二択で提案して火曜に決まりました。改善点：直近の請求書の依頼と、住所の確認を通話の終わりまでに行う。",
     todos:["火曜の訪問を確認：住所と直近の請求書","ハンドブックの「見直し不要」への切り返しを読み直す","もっと難しい相手（即切電や「取引先にお任せ」）で再練習する"],
     older:[["インバウンド通話 · 株主優待ヘルプデスク","11/01 · 04:20"],["アウトバウンド通話 · インターネット／光回線の営業","10/31 · 01:55"]] }
