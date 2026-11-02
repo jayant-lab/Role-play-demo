@@ -134,6 +134,11 @@
   .bub.t { align-self:flex-end; align-items:flex-end; margin-left:auto; }
   .bub.t .tx { background:var(--ink); color:var(--bg); }
   .tr { display:flex; flex-direction:column; }
+  .live2 .box { min-height:330px; }
+  .live2 .pad { overflow:auto; max-height:370px; }
+  .live2 .bub { max-width:92%; }
+  .nl { display:flex; gap:8px; margin-bottom:8px; line-height:1.45; }
+  .nl > span:first-child { color:var(--muted); }
 
   /* step 4 */
   .two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
@@ -268,20 +273,19 @@ const TRASH = '<svg class="trash" width="14" height="14" viewBox="0 0 24 24" fil
 const UI = {
  en: {
   title:"Practice Call to Summary",
-  desc:"A single practice call walked through all seven steps. Everything in blue is a point where the trainee takes control. Sample data; nothing here is a real call.",
+  desc:"A trainee plays the operator (OP) and practises one call with an AI agent that plays the customer. Everything in blue is a point where the trainee takes control. Sample data; nothing here is a real call.",
   disc:"Visual demo only: the AI, the voice and all data shown are simulated. The full working project, built on your own scripts and use cases, follows after contract.",
   trainee:"Trainee steps", restart:"Restart", pause:"Pause", resume:"Resume",
   inbound:"Inbound", outbound:"Outbound", pipeline:"Pipeline", log:"Activity log", visit:"Visit oneinbox.ai",
   tags:{trainee:"Trainee", auto:"Auto", live:"Live"},
-  steps:[["Choose a call","通話を選ぶ"],["Call connects","通話開始"],["AI customer on the line","AIのお客様と会話"],["Notes during the call","通話中のメモ"],["Call ends","通話終了"],["Summary and to-do","要約とToDo"],["Saved to history","履歴に保存"]],
-  win:[["Start screen","Trainee chooses"],["Phone","Simulated line"],["Live transcript","AI customer ↔ trainee"],["Call notes","Trainee types"],["Call ended","Auto"],["After-call work","Trainee saves"],["Recent calls","Auto"]],
-  cap:["The trainee picks a call type. Each type is tied to one use case and one AI customer.",
+  steps:[["Choose a call","通話を選ぶ"],["Call connects","通話開始"],["Live call and notes","AIのお客様と会話・メモ"],["Call ends","通話終了"],["Summary and to-do","研修の振り返りとToDo"],["Saved to history","履歴に保存"]],
+  win:[["Start screen","Trainee chooses"],["Phone","Simulated line"],["Live call","AI customer ↔ trainee (OP)"],["Call ended","Auto"],["After-call work","Trainee writes"],["Recent calls","Auto"]],
+  cap:["The trainee plays the operator (OP). The AI agent plays the customer. Each call type is tied to one use case.",
        "The phone rings and the trainee accepts, just like a real inbound call. For outbound, the trainee dials.",
-       "The AI plays the customer and talks like a real caller. The live transcript builds as the conversation goes.",
-       "While talking, the trainee takes notes. They are saved automatically.",
+       "The AI customer talks like a real caller and the live transcript builds as the call goes. The trainee types notes during the call; they save automatically.",
        "When the call ends, the page moves straight to the after-call work.",
-       "The trainee writes the summary and the to-do list. Notes from the call carry over. Nothing is saved until the trainee saves.",
-       "The call is saved in Recent calls and can be reopened, copied or deleted later."],
+       "After the call the trainee writes a short summary of how the practice call went, plus a to-do list. Notes carry over. Nothing is saved until the trainee saves.",
+       "The practice call is saved in Recent calls and can be reopened, copied or deleted later."],
   ucName:{inbound:"Shareholder benefits help desk", outbound:"Internet / fiber sales"},
   ucText:{inbound:"A shareholder calls you with a question or a problem. Answer as the help-desk operator.", outbound:"You call a business to book an appointment for a business internet (fiber) service."},
   inCall:"Inbound call", outCall:"Outbound call", picked:"Selected",
@@ -289,29 +293,28 @@ const UI = {
   incoming:"Incoming call…", outLbl:"Outbound call", calling:"Calling…", connected:"Connected", connecting:"Connecting to the AI customer…",
   accept:"Accept", decline:"Decline", callBtn:"Call",
   whoIn:"Shareholder", whoOut:"Business (prospect)",
-  live:"LIVE CALL", aiC:"AI customer", you:"You (trainee)",
+  live:"LIVE CALL", aiC:"AI customer", you:"You (OP)",
   notes:"Notes", saving:"Saving…", saved:"✓ Saved automatically", transcript:"Transcript",
   ended:"Call ended", endBtn:"Call ended? Write summary & save →", endHint:"End the call first. Your notes go to the summary page.",
-  sum:"Summary", todo:"To-do list", notesCall:"Notes from the call", save:"Save call", savedBy:"✓ Saved by trainee · 09:17",
+  sum:"Summary: how the practice call went", todo:"To-do list", acw:"After-call work", notesCall:"Notes from the call", save:"Save call", savedBy:"✓ Saved by trainee · 09:17",
   recent:"Recent calls", newT:"New", sumL:"Summary", todoL:"To-do",
   foot:"Sample data · Simulated demo, not a working product · The full project is delivered after contract.",
  },
  ja: {
   title:"練習通話から要約まで",
-  desc:"1件の練習通話を7つのステップで順に紹介します。青色の部分は研修生が自ら操作するポイントです。サンプルデータであり、実際の通話ではありません。",
+  desc:"研修生がオペレーター（OP）役となり、お客様役のAIエージェントと1件の練習通話を行う流れを紹介します。青色の部分は研修生が自ら操作するポイントです。サンプルデータであり、実際の通話ではありません。",
   disc:"画面イメージのみのデモです。AI・音声・表示データはすべて模擬です。お客様のスクリプトとユースケースに基づく実際のシステムは、ご契約後に構築します。",
   trainee:"研修生の操作", restart:"最初から", pause:"一時停止", resume:"再開",
   inbound:"インバウンド", outbound:"アウトバウンド", pipeline:"ステップ", log:"アクティビティログ", visit:"oneinbox.aiへ",
   tags:{trainee:"研修生", auto:"自動", live:"通話中"},
-  steps:[["通話を選ぶ","Choose a call"],["通話開始","Call connects"],["AIのお客様と会話","AI customer on the line"],["通話中のメモ","Notes during the call"],["通話終了","Call ends"],["要約とToDo","Summary and to-do"],["履歴に保存","Saved to history"]],
-  win:[["開始画面","研修生が選択"],["電話","模擬回線"],["ライブ文字起こし","AI顧客 ↔ 研修生"],["通話メモ","研修生が入力"],["通話終了","自動"],["通話後の作業","研修生が保存"],["最近の通話","自動"]],
-  cap:["研修生が通話の種類を選びます。種類ごとに1つのユースケースと1体のAIのお客様が対応します。",
+  steps:[["通話を選ぶ","Choose a call"],["通話開始","Call connects"],["通話中の会話とメモ","Live call and notes"],["通話終了","Call ends"],["振り返りとToDo","Summary and to-do"],["履歴に保存","Saved to history"]],
+  win:[["開始画面","研修生が選択"],["電話","模擬回線"],["通話中","AIのお客様 ↔ 研修生（OP）"],["通話終了","自動"],["通話後の作業","研修生が入力"],["最近の通話","自動"]],
+  cap:["研修生がオペレーター（OP）役、AIエージェントがお客様役を務めます。通話の種類ごとに1つのユースケースが対応します。",
        "実際の着信と同じように電話が鳴り、研修生が応答します。アウトバウンドでは研修生が発信します。",
-       "AIがお客様役を演じ、本物の電話のように話します。会話に合わせてライブ文字起こしが表示されます。",
-       "通話中、研修生はメモを取ります。メモは自動で保存されます。",
+       "AIのお客様が本物の電話のように話し、会話に合わせてライブ文字起こしが表示されます。研修生は通話中にメモを取り、メモは自動で保存されます。",
        "通話が終わると、そのまま通話後の作業に移ります。",
-       "研修生が要約とToDoを入力します。通話中のメモは引き継がれ、保存するまで確定しません。",
-       "通話は「最近の通話」に保存され、あとから開き直したり削除したりできます。"],
+       "通話後、研修生は練習通話の振り返りを短い要約とToDoにまとめます。通話中のメモは引き継がれ、保存するまで確定しません。",
+       "練習通話は「最近の通話」に保存され、あとから開き直したり削除したりできます。"],
   ucName:{inbound:"株主優待ヘルプデスク", outbound:"インターネット／光回線の営業"},
   ucText:{inbound:"株主様から質問や困りごとのお電話が入ります。ヘルプデスクのオペレーターとして対応します。", outbound:"法人のお客様に電話をかけ、法人向けインターネット（光回線）の訪問アポイントを取ります。"},
   inCall:"インバウンド通話", outCall:"アウトバウンド通話", picked:"選択中",
@@ -319,10 +322,10 @@ const UI = {
   incoming:"着信中…", outLbl:"発信", calling:"発信中…", connected:"接続しました", connecting:"AIのお客様に接続中…",
   accept:"応答", decline:"拒否", callBtn:"発信",
   whoIn:"株主様", whoOut:"法人のお客様（見込み客）",
-  live:"通話中", aiC:"AIのお客様", you:"あなた（研修生）",
+  live:"通話中", aiC:"AIのお客様", you:"あなた（OP）",
   notes:"メモ", saving:"保存中…", saved:"✓ 自動保存済み", transcript:"文字起こし",
   ended:"通話が終了しました", endBtn:"通話が終わったら：要約を書いて保存 →", endHint:"先に通話を終了してください。メモは要約ページに引き継がれます。",
-  sum:"要約", todo:"ToDoリスト", notesCall:"通話中のメモ", save:"通話を保存", savedBy:"✓ 研修生が保存 · 09:17",
+  sum:"要約（練習通話の振り返り）", todo:"ToDoリスト", acw:"通話後の作業", notesCall:"通話中のメモ", save:"通話を保存", savedBy:"✓ 研修生が保存 · 09:17",
   recent:"最近の通話", newT:"新規", sumL:"要約", todoL:"ToDo",
   foot:"サンプルデータ · 模擬デモであり実際の製品ではありません · 本プロジェクトはご契約後に納品します。",
  }
@@ -332,73 +335,69 @@ const DATA = {
  inbound: {
   en: { call:"Shareholder benefits help desk", dur:"03:12",
     turns:[["t","Hello, shareholder benefits help desk. How may I help you?"],["c","My peaches arrived, but they were rotten. Can I exchange them?"],["t","I'm sorry about that. How many of them are rotten?"],["c","Two out of the ten."],["t","Could you keep them for now and send a photo by email? I'll check the order and call you back."],["c","All right. Please call me back, but not in the mornings."]],
-    notes:"Peaches, set of 10, 2 rotten. Opened yesterday. Asked to keep the item and send photos by email. Check order (9/12). Call back in the afternoon.",
-    summary:"Shareholder reports 2 of 10 peaches rotten (ordered 9/12). Asked them to keep the item and send photos by email. Escalated for an exchange decision; callback this afternoon.",
-    todos:["Check order history (9/12, 9:00)","Email the photo-upload instructions","Call back this afternoon: 090-1234-5678"],
+    notesLines:[[1,"Peaches arrived rotten, wants an exchange"],[3,"2 of 10 rotten"],[4,"Keep the item, photos by email, check order, call back"],[5,"Callback: afternoon only"]],
+    summary:"Practice call with the AI shareholder (damaged item). The customer said 2 of 10 peaches arrived rotten. I asked how many, asked them to keep the item and send photos, and promised a callback. To improve: confirm the delivery address and read back the order date.",
+    todos:["Call the customer back this afternoon (practice follow-up)","Re-read the damaged-item section of the FAQ","Practise again and confirm the address before closing"],
     older:[["Outbound call · Internet / fiber sales","11/01 · 02:48"],["Inbound call · Shareholder benefits help desk","10/31 · 04:05"]] },
   ja: { call:"株主優待ヘルプデスク", dur:"03:12",
     turns:[["t","お電話ありがとうございます。株主優待ヘルプデスクでございます。"],["c","桃が届いたんですけど、腐ってたんです。交換できますか？"],["t","申し訳ございません。傷んでいたのは何個ですか？"],["c","10個のうち2個です。"],["t","いったん手元に残していただき、写真をメールでお送りいただけますか。ご注文を確認して折り返しご連絡します。"],["c","分かりました。折り返しはお願いしますけど、午前中は出られないんです。"]],
-    notes:"桃10個セット、2個傷みあり。昨日開封。現物は保管し、写真をメール送付。注文確認（9/12）。午後に折り返し。",
-    summary:"株主様より、桃10個のうち2個が傷んでいるとのご連絡（9/12注文）。現物を保管し、写真をメールで送付いただくようご案内。交換可否はエスカレーション済み、午後に折り返し。",
-    todos:["注文履歴を確認（9/12 9:00）","写真送付の案内メールを送信","今日の午後に折り返し：090-1234-5678"],
+    notesLines:[[1,"桃が傷んで届いた。交換希望"],[3,"10個中2個が傷み"],[4,"現物は保管・写真をメールで・注文確認・折り返し"],[5,"折り返しは午後のみ"]],
+    summary:"AIの株主様との練習通話（商品不備）。桃10個のうち2個が傷んでいるとのこと。傷んだ個数を確認し、現物の保管と写真のメール送付をお願いして、折り返しを約束しました。改善点：お届け先住所の確認と、注文日の復唱。",
+    todos:["今日の午後にお客様へ折り返し（練習のフォローアップ）","FAQの「商品不備」の項目を読み直す","もう一度練習し、通話を終える前に住所を確認する"],
     older:[["アウトバウンド通話 · インターネット／光回線の営業","11/01 · 02:48"],["インバウンド通話 · 株主優待ヘルプデスク","10/31 · 04:05"]] }
  },
  outbound: {
   en: { call:"Internet / fiber sales", dur:"03:12",
     turns:[["c","Hello, Midori Seisakusho."],["t","Hello, this is Tanaka from Sakura Telecom. Is the person in charge of telecom available?"],["c","Hello, this is Suzuki from General Affairs. We're fine for now, no problems."],["t","I understand. This isn't about switching, just a short greeting from our regional representative. Are you on 1G today?"],["c","Yes, about 7,400 yen a month including the provider."],["t","Our fiber runs on our own network, so we can compare. Would Tuesday or Thursday suit you?"],["c","All right. Tuesday, then."]],
-    notes:"Suzuki, General Affairs. NTT-type line, 1G, about ¥7,400/month incl. ISP. Visit on Tuesday. Ask for a recent bill.",
-    summary:"Appointment booked: regional representative visits on Tuesday. Contact: Suzuki, General Affairs. Current line: 1G, about ¥7,400/month including ISP.",
-    todos:["Add the Tuesday visit to the calendar","Prepare a price comparison against ¥7,400","Ask the customer to have a recent internet bill ready"],
+    notesLines:[[2,"Suzuki, General Affairs. \"Fine for now\""],[4,"1G, about 7,400 yen/month incl. ISP"],[6,"Visit booked: Tuesday"]],
+    summary:"Practice call with the AI prospect (General Affairs). They said they were fine with their current line. I acknowledged it, said it was only a greeting, asked about their line and offered two dates; they chose Tuesday. To improve: ask for a recent bill and confirm the address before closing.",
+    todos:["Confirm the Tuesday visit: address and a recent bill","Re-read the handbook page on \"no need to review\" objections","Practise again with a harder prospect (hang-up or \"we have a partner\")"],
     older:[["Inbound call · Shareholder benefits help desk","11/01 · 04:20"],["Outbound call · Internet / fiber sales","10/31 · 01:55"]] },
   ja: { call:"インターネット／光回線の営業", dur:"03:12",
     turns:[["c","はい、みどり製作所です。"],["t","お世話になっております。サクラ通信の田中と申します。通信関係のご担当者様はいらっしゃいますか？"],["c","お電話代わりました、総務の鈴木です。今のところ特に困ってないので、大丈夫です。"],["t","そうですよね。切り替えのお話ではなく、地域担当からの簡単なご挨拶です。ちなみに今は1ギガでしょうか？"],["c","ええ、プロバイダ込みで月7,400円くらいです。"],["t","弊社の光は独自回線ですので、今のご契約と比較できます。火曜と木曜なら、どちらがよろしいでしょうか？"],["c","分かりました。じゃあ、火曜で。"]],
-    notes:"総務の鈴木様。NTT系回線・1G・ISP込みで月7,400円ほど。火曜に訪問。直近の請求書を依頼。",
-    summary:"アポイント獲得：火曜に地域担当が訪問。ご担当：総務の鈴木様。現在の回線：1G、ISP込みで月7,400円ほど。",
-    todos:["火曜の訪問をカレンダーに登録","月7,400円との料金比較資料を準備","直近のインターネット請求書の準備を依頼"],
+    notesLines:[[2,"総務の鈴木様。「今は大丈夫」"],[4,"1G・ISP込みで月7,400円ほど"],[6,"訪問アポ：火曜"]],
+    summary:"AIの見込み客（総務ご担当）との練習通話。現在の回線に不満はないとのことでした。一度受け止めたうえで、ご挨拶だけであることを伝え、回線について質問し、日程を二択で提案して火曜に決まりました。改善点：直近の請求書の依頼と、住所の確認を通話の終わりまでに行う。",
+    todos:["火曜の訪問を確認：住所と直近の請求書","ハンドブックの「見直し不要」への切り返しを読み直す","もっと難しい相手（即切電や「取引先にお任せ」）で再練習する"],
     older:[["インバウンド通話 · 株主優待ヘルプデスク","11/01 · 04:20"],["アウトバウンド通話 · インターネット／光回線の営業","10/31 · 01:55"]] }
  }
 };
 
 const LOGS = {
  en: { inbound:[
-    [["09:12","Trainee chose Inbound call","trainee"],["09:12","Use case: Shareholder benefits help desk","system"]],
+    [["09:12","Trainee (OP) chose Inbound call","trainee"],["09:12","Use case: Shareholder benefits help desk","system"]],
     [["09:12","Phone rings: incoming call","system"],["09:12","Trainee accepted the call","trainee"]],
-    [["09:13","AI customer opened with the problem","ai"],["09:14","Live transcript updating","system"],["09:15","AI customer answered only what was asked","ai"]],
-    [["09:15","Notes saved automatically","system"]],
+    [["09:13","AI customer opened with the problem","ai"],["09:14","Trainee typed notes during the call","trainee"],["09:15","Notes saved automatically","system"]],
     [["09:16","Call ended · 03:12","system"]],
-    [["09:17","Summary and 3 to-dos written","trainee"],["09:17","Call saved","trainee"]],
+    [["09:17","Practice summary and 3 to-dos written","trainee"],["09:17","Call saved","trainee"]],
     [["09:17","Added to Recent calls","system"]] ],
   outbound:[
-    [["09:12","Trainee chose Outbound call","trainee"],["09:12","Use case: Internet / fiber sales","system"]],
+    [["09:12","Trainee (OP) chose Outbound call","trainee"],["09:12","Use case: Internet / fiber sales","system"]],
     [["09:12","Trainee dialed","trainee"],["09:12","Line connected","system"]],
-    [["09:13","AI prospect answered as reception","ai"],["09:14","Objection raised: \"we're fine for now\"","ai"],["09:15","Prospect agreed to a visit","ai"]],
-    [["09:15","Notes saved automatically","system"]],
+    [["09:13","AI prospect answered as reception","ai"],["09:14","Objection raised: \"we're fine for now\"","ai"],["09:14","Trainee typed notes during the call","trainee"],["09:15","Prospect agreed to a visit","ai"]],
     [["09:16","Call ended · 03:12","system"]],
-    [["09:17","Summary and 3 to-dos written","trainee"],["09:17","Call saved","trainee"]],
+    [["09:17","Practice summary and 3 to-dos written","trainee"],["09:17","Call saved","trainee"]],
     [["09:17","Added to Recent calls","system"]] ] },
  ja: { inbound:[
-    [["09:12","研修生がインバウンド通話を選択","trainee"],["09:12","ユースケース：株主優待ヘルプデスク","system"]],
+    [["09:12","研修生（OP）がインバウンド通話を選択","trainee"],["09:12","ユースケース：株主優待ヘルプデスク","system"]],
     [["09:12","着信：電話が鳴る","system"],["09:12","研修生が応答","trainee"]],
-    [["09:13","AIのお客様が困りごとを切り出す","ai"],["09:14","ライブ文字起こしを更新","system"],["09:15","AIは聞かれたことだけに回答","ai"]],
-    [["09:15","メモを自動保存","system"]],
+    [["09:13","AIのお客様が困りごとを切り出す","ai"],["09:14","研修生が通話中にメモを入力","trainee"],["09:15","メモを自動保存","system"]],
     [["09:16","通話終了 · 03:12","system"]],
-    [["09:17","要約とToDo 3件を入力","trainee"],["09:17","通話を保存","trainee"]],
+    [["09:17","練習の振り返りとToDo 3件を入力","trainee"],["09:17","通話を保存","trainee"]],
     [["09:17","「最近の通話」に追加","system"]] ],
   outbound:[
-    [["09:12","研修生がアウトバウンド通話を選択","trainee"],["09:12","ユースケース：インターネット／光回線の営業","system"]],
+    [["09:12","研修生（OP）がアウトバウンド通話を選択","trainee"],["09:12","ユースケース：インターネット／光回線の営業","system"]],
     [["09:12","研修生が発信","trainee"],["09:12","回線に接続","system"]],
-    [["09:13","AIの見込み客が受付として応答","ai"],["09:14","断り文句：「今のところ大丈夫です」","ai"],["09:15","見込み客が訪問を了承","ai"]],
-    [["09:15","メモを自動保存","system"]],
+    [["09:13","AIの見込み客が受付として応答","ai"],["09:14","断り文句：「今のところ大丈夫です」","ai"],["09:14","研修生が通話中にメモを入力","trainee"],["09:15","見込み客が訪問を了承","ai"]],
     [["09:16","通話終了 · 03:12","system"]],
-    [["09:17","要約とToDo 3件を入力","trainee"],["09:17","通話を保存","trainee"]],
+    [["09:17","練習の振り返りとToDo 3件を入力","trainee"],["09:17","通話を保存","trainee"]],
     [["09:17","「最近の通話」に追加","system"]] ] }
 };
 const SRC = { en:{trainee:"TRAINEE", system:"SYSTEM", ai:"AI CUSTOMER"}, ja:{trainee:"研修生", system:"システム", ai:"AIのお客様"} };
 
 /* ------------------------------------------------------------------ state */
-const DUR = [5200, 6000, 25000, 9500, 4500, 12500, 7000];
-const KINDS = ["trainee","auto","live","trainee","auto","trainee","auto"];
-const TRAINEE_STEPS = [0,3,5];
+const DUR = [5200, 6000, 30000, 4500, 12500, 7000];
+const KINDS = ["trainee","auto","live","auto","trainee","auto"];
+const TRAINEE_STEPS = [0,2,4];
 let lang = "en", uc = "inbound", speed = 1, paused = false, si = 0, el = 0, logCount = 0;
 let mounted = -1, last = performance.now();
 const D = () => DATA[uc][lang];
@@ -444,16 +443,18 @@ const S = [
     ph.classList.toggle("ring", ring); pl.textContent = label; ps.textContent = status;
   }
  },
- { // 3 talk
+ { // 3 live call: transcript + notes typed during the call
   mount() {
     const u = U();
     body.innerHTML = `<div class="live-row"><span class="ldot"></span><b>${esc(u.live)}</b><span class="timer" id="tm">00:00</span></div>
       <div class="wave" id="wv">${Array.from({length:28},(_,i)=>`<i style="animation-delay:${(i*0.07).toFixed(2)}s;animation-duration:${(0.7+(i%5)*0.15).toFixed(2)}s"></i>`).join("")}</div>
-      <div class="tr" id="tr"></div>`;
-    this.n = 0;
+      <div class="two live2">
+        <div class="box"><h4>${esc(u.transcript)}</h4><div class="pad tr" id="tr"></div></div>
+        <div class="box"><h4>${esc(u.notes)} <span class="saved" id="sv"></span></h4><div class="pad" id="nt"></div></div>
+      </div>`;
   },
   update(t) {
-    const turns = D().turns, n = turns.length, slot = (DUR[2] - 3200) / n, tr = $("#tr"), u = U();
+    const d = D(), turns = d.turns, n = turns.length, slot = (DUR[2] - 4000) / n, tr = $("#tr"), u = U();
     $("#tm").textContent = mmss(Math.min(t / DUR[2], 1) * 192);
     let shown = 0, speaking = false;
     turns.forEach((tn, i) => {
@@ -465,20 +466,18 @@ const S = [
       if (cur.length < full.length) speaking = true;
     });
     while (tr.children.length > shown) tr.removeChild(tr.lastChild);
+    tr.scrollTop = tr.scrollHeight;
     $("#wv").classList.toggle("off", !speaking);
-    body.scrollTop = body.scrollHeight;
-  }
- },
- { // 4 notes
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="two"><div class="box"><h4>${esc(u.transcript)}</h4><div class="pad mini">${D().turns.map(tn=>`<div><b>${esc(tn[0]==="c"?u.aiC:u.you)}:</b> ${esc(tn[1])}</div>`).join("")}</div></div>
-      <div class="box"><h4>${esc(u.notes)} <span class="saved" id="sv"></span></h4><div class="pad" id="nt"></div></div></div>`;
-  },
-  update(t) {
-    const full = D().notes, cur = typed(full, t - 500, 52), u = U(), nt = $("#nt"), sv = $("#sv");
-    nt.textContent = cur; nt.classList.toggle("caret", cur.length < full.length);
-    const saving = cur.length < full.length; sv.textContent = saving ? u.saving : u.saved; sv.classList.toggle("saving", saving);
+    // the trainee types a note a moment after the matching line of the conversation
+    let html = "", typing = false, any = false;
+    d.notesLines.forEach(nl => {
+      const st = 600 + nl[0] * slot + 1700, cur = typed(nl[1], t - st, 40);
+      if (!cur.length) return; any = true;
+      const act = cur.length < nl[1].length; if (act) typing = true;
+      html += `<div class="nl"><span>•</span><span class="${act ? "caret" : ""}">${esc(cur)}</span></div>`;
+    });
+    const nt = $("#nt"); if (nt.dataset.h !== html) { nt.dataset.h = html; nt.innerHTML = html; }
+    const sv = $("#sv"); sv.textContent = !any ? "" : typing ? u.saving : u.saved; sv.classList.toggle("saving", typing);
   }
  },
  { // 5 end
@@ -491,11 +490,11 @@ const S = [
  { // 6 summary
   mount() {
     const u = U();
-    body.innerHTML = `<div class="two"><div class="box"><h4>${esc(u.sum)} &amp; ${esc(u.todo)}</h4><div class="pad">
+    body.innerHTML = `<div class="two"><div class="box"><h4>${esc(u.acw)}</h4><div class="pad">
         <div class="fld"><label>${esc(u.sum)}</label><div class="inp" id="su"></div></div>
         <div class="fld" style="margin-top:14px"><label>${esc(u.todo)}</label><div id="td"></div></div>
         <div class="savebar"><span id="ob"></span><button class="savebtn" id="sb">${esc(u.save)}</button></div></div></div>
-      <div class="box"><h4>${esc(u.notesCall)}</h4><div class="pad">${esc(D().notes)}</div></div></div>`;
+      <div class="box"><h4>${esc(u.notesCall)}</h4><div class="pad">${D().notesLines.map(x=>`<div class="nl"><span>•</span><span>${esc(x[1])}</span></div>`).join("")}</div></div></div>`;
   },
   update(t) {
     const d = D(), full = d.summary, cps = 62, s0 = 500;

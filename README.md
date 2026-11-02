@@ -2,7 +2,7 @@
 
 A self-playing, **simulated** walkthrough of the Role Play voice-AI training use case, for prospects who want to *see* the product before a contract. It is not a working product.
 
-- **What it shows:** one practice call, step by step: choose a call, phone connects, AI customer talks (live transcript), the trainee's notes, call ends, after-call summary and to-do, saved to history.
+- **What it shows:** a trainee plays the operator (OP) and practises one call with an AI agent that plays the customer, in six steps: choose a call, phone connects, live call (transcript and the trainee's notes typed during the call), call ends, the trainee's summary of how the practice call went plus a to-do list, saved to history.
 - **Two use cases:** Inbound (shareholder benefits help desk) and Outbound (internet / fiber sales). Switch between them at the top.
 - **Languages:** English and Japanese (switcher in the header).
 - **Controls:** speed (0.6x / 1x / 1.8x), restart, pause, and click any step in the list to jump to it. Light / dark theme.
