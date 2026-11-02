@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Practice Call to Summary – Role Play demo</title>
-<meta name="description" content="A simulated walkthrough of the Role Play voice-AI training use case. Sample data only.">
+<title>AI role-play training for call-center operators – OneInbox</title>
+<meta name="description" content="AI role-play training for call-center operators: a trainee practises inbound and outbound calls with an AI agent that plays the customer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -208,6 +208,23 @@
     .choose { grid-template-columns:1fr; }
     .win { min-height:480px; }
   }
+
+  /* both use cases on one page */
+  .ucs { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:4px 0 6px; }
+  .ucc { display:flex; gap:14px; align-items:flex-start; text-decoration:none; border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:var(--panel); transition:border-color .15s, box-shadow .15s; }
+  .ucc:hover { border-color:var(--ink); box-shadow:0 4px 18px rgba(0,0,0,.06); }
+  .ucc .ic { flex:none; width:40px; height:40px; border-radius:11px; background:var(--soft); display:grid; place-items:center; }
+  .ucc b { display:block; font-size:15px; }
+  .ucc .un { display:inline-block; margin:5px 0 6px; padding:2px 9px; border-radius:999px; background:var(--soft); font-size:11.5px; font-weight:600; }
+  .ucc p { margin:0; color:var(--muted); font-size:12.5px; }
+  .sec { margin-top:30px; scroll-margin-top:12px; }
+  .sec-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .sec-head h2 { margin:0; font-size:22px; letter-spacing:-.02em; font-weight:600; }
+  .chip { font:600 10px var(--mono); letter-spacing:.1em; text-transform:uppercase; background:var(--ink); color:var(--bg); border-radius:4px; padding:3px 8px; }
+  .sec-head .pill { margin-left:auto; }
+  .sec-head p { flex-basis:100%; margin:0; color:var(--muted); }
+  .hero { border-top:0; padding-bottom:12px; }
+  @media (max-width: 1060px) { .ucs { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -230,29 +247,16 @@
     <div>
       <h1 id="h1"></h1>
       <p class="desc" id="desc"></p>
-      <p class="disc" id="disc"></p>
     </div>
     <div class="controls">
-      <span class="pill" id="trainee"></span>
-      <span class="seg" id="ucseg"><button data-uc="inbound"></button><button data-uc="outbound"></button></span>
       <span class="seg" id="spdseg"><button data-s="0.6">0.6×</button><button data-s="1" class="on">1×</button><button data-s="1.8">1.8×</button></span>
       <button class="btn" id="restart"></button>
       <button class="btn dark" id="pause"></button>
     </div>
   </section>
-  <div class="bar"><i id="prog"></i></div>
-
-  <section class="stage">
-    <aside class="card pipe"><div class="cap"><span id="pipeLbl"></span><span id="pipeCnt"></span></div><div id="steps"></div></aside>
-    <div class="card win">
-      <div class="win-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl" id="wTitle"></span><span class="lbl" id="wLbl"></span></div>
-      <div class="win-body" id="body"></div>
-      <div class="win-foot"><span class="n" id="fN"></span><span id="fText"></span></div>
-    </div>
-    <aside class="card log"><div class="cap"><span id="logLbl"></span></div><div class="log-list" id="log"></div></aside>
-  </section>
+  <div class="ucs" id="ucs"></div>
+  <div id="demos"></div>
 </main>
-<footer id="foot"></footer>
 <noscript><p style="padding:24px">This demo needs JavaScript.</p></noscript>
 
 <script>
@@ -272,9 +276,8 @@ const TRASH = '<svg class="trash" width="14" height="14" viewBox="0 0 24 24" fil
 /* ------------------------------------------------------------------ copy */
 const UI = {
  en: {
-  title:"Practice Call to Summary",
-  desc:"A trainee plays the operator (OP) and practises one call with an AI agent that plays the customer. Everything in blue is a point where the trainee takes control. Sample data; nothing here is a real call.",
-  disc:"Visual demo only: the AI, the voice and all data shown are simulated. The full working project, built on your own scripts and use cases, follows after contract.",
+  title:"AI role-play training for call-center operators",
+  desc:"A trainee plays the operator (OP) and practises calls with an AI agent that plays the customer. Everything in blue is a point where the trainee takes control.",
   trainee:"Trainee steps", restart:"Restart", pause:"Pause", resume:"Resume",
   inbound:"Inbound", outbound:"Outbound", pipeline:"Pipeline", log:"Activity log", visit:"Visit oneinbox.ai",
   tags:{trainee:"Trainee", auto:"Auto", live:"Live"},
@@ -289,7 +292,6 @@ const UI = {
   ucName:{inbound:"Shareholder benefits help desk", outbound:"Internet / fiber sales"},
   ucText:{inbound:"A shareholder calls you with a question or a problem. Answer as the help-desk operator.", outbound:"You call a business to book an appointment for a business internet (fiber) service."},
   inCall:"Inbound call", outCall:"Outbound call", picked:"Selected",
-  hint:"Sample screen. In the real project each use case has its own scripted AI customer.",
   incoming:"Incoming call…", outLbl:"Outbound call", calling:"Calling…", connected:"Connected", connecting:"Connecting to the AI customer…",
   accept:"Accept", decline:"Decline", callBtn:"Call",
   whoIn:"Shareholder", whoOut:"Business (prospect)",
@@ -298,12 +300,10 @@ const UI = {
   ended:"Call ended", endBtn:"Call ended? Write summary & save →", endHint:"End the call first. Your notes go to the summary page.",
   sum:"Summary: how the practice call went", todo:"To-do list", acw:"After-call work", notesCall:"Notes from the call", save:"Save call", savedBy:"✓ Saved by trainee · 09:17",
   recent:"Recent calls", newT:"New", sumL:"Summary", todoL:"To-do",
-  foot:"Sample data · Simulated demo, not a working product · The full project is delivered after contract.",
  },
  ja: {
-  title:"練習通話から要約まで",
-  desc:"研修生がオペレーター（OP）役となり、お客様役のAIエージェントと1件の練習通話を行う流れを紹介します。青色の部分は研修生が自ら操作するポイントです。サンプルデータであり、実際の通話ではありません。",
-  disc:"画面イメージのみのデモです。AI・音声・表示データはすべて模擬です。お客様のスクリプトとユースケースに基づく実際のシステムは、ご契約後に構築します。",
+  title:"コールセンター向け AIロールプレイ研修",
+  desc:"研修生がオペレーター（OP）役となり、お客様役のAIエージェントと通話を練習する流れを紹介します。青色の部分は研修生が自ら操作するポイントです。",
   trainee:"研修生の操作", restart:"最初から", pause:"一時停止", resume:"再開",
   inbound:"インバウンド", outbound:"アウトバウンド", pipeline:"ステップ", log:"アクティビティログ", visit:"oneinbox.aiへ",
   tags:{trainee:"研修生", auto:"自動", live:"通話中"},
@@ -318,7 +318,6 @@ const UI = {
   ucName:{inbound:"株主優待ヘルプデスク", outbound:"インターネット／光回線の営業"},
   ucText:{inbound:"株主様から質問や困りごとのお電話が入ります。ヘルプデスクのオペレーターとして対応します。", outbound:"法人のお客様に電話をかけ、法人向けインターネット（光回線）の訪問アポイントを取ります。"},
   inCall:"インバウンド通話", outCall:"アウトバウンド通話", picked:"選択中",
-  hint:"サンプル画面です。実際のプロジェクトでは、ユースケースごとにスクリプトに沿ったAIのお客様が対応します。",
   incoming:"着信中…", outLbl:"発信", calling:"発信中…", connected:"接続しました", connecting:"AIのお客様に接続中…",
   accept:"応答", decline:"拒否", callBtn:"発信",
   whoIn:"株主様", whoOut:"法人のお客様（見込み客）",
@@ -327,7 +326,6 @@ const UI = {
   ended:"通話が終了しました", endBtn:"通話が終わったら：要約を書いて保存 →", endHint:"先に通話を終了してください。メモは要約ページに引き継がれます。",
   sum:"要約（練習通話の振り返り）", todo:"ToDoリスト", acw:"通話後の作業", notesCall:"通話中のメモ", save:"通話を保存", savedBy:"✓ 研修生が保存 · 09:17",
   recent:"最近の通話", newT:"新規", sumL:"要約", todoL:"ToDo",
-  foot:"サンプルデータ · 模擬デモであり実際の製品ではありません · 本プロジェクトはご契約後に納品します。",
  }
 };
 
@@ -394,214 +392,246 @@ const LOGS = {
 };
 const SRC = { en:{trainee:"TRAINEE", system:"SYSTEM", ai:"AI CUSTOMER"}, ja:{trainee:"研修生", system:"システム", ai:"AIのお客様"} };
 
-/* ------------------------------------------------------------------ state */
+
+/* ------------------------------------------------------------------ shared state */
 const DUR = [5200, 6000, 30000, 4500, 12500, 7000];
 const KINDS = ["trainee","auto","live","auto","trainee","auto"];
 const TRAINEE_STEPS = [0,2,4];
-let lang = "en", uc = "inbound", speed = 1, paused = false, si = 0, el = 0, logCount = 0;
-let mounted = -1, last = performance.now();
-const D = () => DATA[uc][lang];
+const UCS = ["inbound","outbound"];
+let lang = "en", speed = 1, paused = false;
+const demos = {};
 const U = () => UI[lang];
 const typed = (s, ms, cps) => s.slice(0, Math.max(0, Math.floor(ms * cps * (lang === "ja" ? 0.45 : 1) / 1000)));
 const mmss = n => String(Math.floor(n / 60)).padStart(2,"0") + ":" + String(Math.floor(n % 60)).padStart(2,"0");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-/* ------------------------------------------------------------------ steps */
-const body = $("#body");
-const S = [
- { // 1 choose
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="choose">
-      ${["inbound","outbound"].map(k => `<div class="chc" data-k="${k}"><span class="picked">${esc(u.picked)}</span><div class="ic">${k==="inbound"?ICO_IN:ICO_OUT}</div><b>${esc(k==="inbound"?u.inCall:u.outCall)}</b><span class="uc">${esc(u.ucName[k])}</span><p>${esc(u.ucText[k])}</p></div>`).join("")}
-    </div><p class="hint">${esc(u.hint)}</p>`;
-  },
-  update(t) { body.querySelectorAll(".chc").forEach(c => c.classList.toggle("sel", t > 1700 && c.dataset.k === uc)); }
- },
- { // 2 connect
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="phone-wrap"><div class="phone" id="ph"><div class="av">${ICO_USER}</div><div class="ph-lbl" id="pl"></div><div class="ph-who">${esc(uc==="inbound"?u.whoIn:u.whoOut)}</div><div class="ph-act" id="pa"></div><div class="ph-st" id="ps"></div></div></div>`;
-  },
-  update(t) {
-    const u = U(), ph = $("#ph"), pl = $("#pl"), pa = $("#pa"), ps = $("#ps");
-    let key, label, ring, status = "";
-    if (uc === "inbound") {
-      if (t < 2600) { key="a0"; label=u.incoming; ring=true; }
-      else if (t < 3500) { key="a1"; label=u.incoming; ring=true; }
-      else { key="a2"; label=u.connected; ring=false; status=u.connecting; }
-    } else {
-      if (t < 1300) { key="b0"; label=u.outLbl; ring=false; }
-      else if (t < 3300) { key="b1"; label=u.calling; ring=true; }
-      else { key="b2"; label=u.connected; ring=false; status=u.connecting; }
-    }
-    if (pa.dataset.k !== key) {
-      pa.dataset.k = key;
-      if (uc === "inbound") pa.innerHTML = key==="a2" ? "" : `<div class="ra"><button class="rb r" aria-label="${esc(u.decline)}">${ICO_HANG}</button><small>${esc(u.decline)}</small></div><div class="ra"><button class="rb g ${key==="a1"?"pressed":""}" aria-label="${esc(u.accept)}">${ICO_CALL}</button><small>${esc(u.accept)}</small></div>`;
-      else pa.innerHTML = key==="b2" ? "" : key==="b0" ? `<div class="ra"><button class="rb g" aria-label="${esc(u.callBtn)}">${ICO_CALL}</button><small>${esc(u.callBtn)}</small></div>` : `<div class="ra"><button class="rb r" aria-label="${esc(u.decline)}">${ICO_HANG}</button><small>${esc(u.decline)}</small></div>`;
-    }
-    ph.classList.toggle("ring", ring); pl.textContent = label; ps.textContent = status;
-  }
- },
- { // 3 live call: transcript + notes typed during the call
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="live-row"><span class="ldot"></span><b>${esc(u.live)}</b><span class="timer" id="tm">00:00</span></div>
-      <div class="wave" id="wv">${Array.from({length:28},(_,i)=>`<i style="animation-delay:${(i*0.07).toFixed(2)}s;animation-duration:${(0.7+(i%5)*0.15).toFixed(2)}s"></i>`).join("")}</div>
-      <div class="two live2">
-        <div class="box"><h4>${esc(u.transcript)}</h4><div class="pad tr" id="tr"></div></div>
-        <div class="box"><h4>${esc(u.notes)} <span class="saved" id="sv"></span></h4><div class="pad" id="nt"></div></div>
-      </div>`;
-  },
-  update(t) {
-    const d = D(), turns = d.turns, n = turns.length, slot = (DUR[2] - 4000) / n, tr = $("#tr"), u = U();
-    $("#tm").textContent = mmss(Math.min(t / DUR[2], 1) * 192);
-    let shown = 0, speaking = false;
-    turns.forEach((tn, i) => {
-      const st = 600 + i * slot; if (t < st) return; shown = i + 1;
-      let b = tr.children[i];
-      if (!b) { b = document.createElement("div"); b.className = "bub " + tn[0]; b.innerHTML = `<span class="who">${esc(tn[0]==="c"?u.aiC:u.you)}</span><div class="tx"></div>`; tr.appendChild(b); }
-      const full = tn[1], cur = typed(full, t - st, 48);
-      b.querySelector(".tx").textContent = cur;
-      if (cur.length < full.length) speaking = true;
-    });
-    while (tr.children.length > shown) tr.removeChild(tr.lastChild);
-    tr.scrollTop = tr.scrollHeight;
-    $("#wv").classList.toggle("off", !speaking);
-    // the trainee types a note a moment after the matching line of the conversation
-    let html = "", typing = false, any = false;
-    d.notesLines.forEach(nl => {
-      const st = 600 + nl[0] * slot + 1700, cur = typed(nl[1], t - st, 40);
-      if (!cur.length) return; any = true;
-      const act = cur.length < nl[1].length; if (act) typing = true;
-      html += `<div class="nl"><span>•</span><span class="${act ? "caret" : ""}">${esc(cur)}</span></div>`;
-    });
-    const nt = $("#nt"); if (nt.dataset.h !== html) { nt.dataset.h = html; nt.innerHTML = html; }
-    const sv = $("#sv"); sv.textContent = !any ? "" : typing ? u.saving : u.saved; sv.classList.toggle("saving", typing);
-  }
- },
- { // 5 end
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="end"><div><div class="ck">${ICO_CHK}</div><h3>${esc(u.ended)}</h3><div class="dur">${esc(D().call)} · ${esc(D().dur)}</div><button class="bigbtn" id="eb">${esc(u.endBtn)}</button><small>${esc(u.endHint)}</small></div></div>`;
-  },
-  update(t) { $("#eb").classList.toggle("pressed", t > 2800); }
- },
- { // 6 summary
-  mount() {
-    const u = U();
-    body.innerHTML = `<div class="two"><div class="box"><h4>${esc(u.acw)}</h4><div class="pad">
-        <div class="fld"><label>${esc(u.sum)}</label><div class="inp" id="su"></div></div>
-        <div class="fld" style="margin-top:14px"><label>${esc(u.todo)}</label><div id="td"></div></div>
-        <div class="savebar"><span id="ob"></span><button class="savebtn" id="sb">${esc(u.save)}</button></div></div></div>
-      <div class="box"><h4>${esc(u.notesCall)}</h4><div class="pad">${D().notesLines.map(x=>`<div class="nl"><span>•</span><span>${esc(x[1])}</span></div>`).join("")}</div></div></div>`;
-  },
-  update(t) {
-    const d = D(), full = d.summary, cps = 62, s0 = 500;
-    const cur = typed(full, t - s0, cps), su = $("#su"), td = $("#td");
-    su.textContent = cur; su.classList.toggle("caret", cur.length < full.length);
-    const per = lang === "ja" ? 0.45 : 1, typedMs = full.length / (cps * per) * 1000, t0 = s0 + typedMs + 400;
-    const nTodo = Math.max(0, Math.min(d.todos.length, Math.floor((t - t0) / 900) + 1));
-    if (td.children.length !== nTodo) td.innerHTML = d.todos.slice(0, nTodo).map(x => `<div class="todo"><span class="cb"></span><span>${esc(x)}</span></div>`).join("");
-    const tSave = t0 + d.todos.length * 900 + 500;
-    $("#sb").classList.toggle("pressed", t > tSave && t < tSave + 600);
-    const ob = $("#ob"), want = t > tSave + 300;
-    if (want && !ob.firstChild) ob.innerHTML = `<span class="okbanner">${esc(U().savedBy)}</span>`;
-    if (!want && ob.firstChild) ob.innerHTML = "";
-  }
- },
- { // 7 history
-  mount() {
-    const u = U(), d = D();
-    body.innerHTML = `<div class="sec-h">${esc(u.recent)}</div><div id="rc"></div>`;
-    this.d = d;
-  },
-  update(t) {
-    const u = U(), d = D(), open = t > 2600, show = t > 500;
-    const html = (show ? `<div class="rec new ${open?"open":""}"><div class="rh">${CHEV}<b>${esc((uc==="inbound"?u.inCall:u.outCall)+" · "+d.call)}</b><span class="newtag">${esc(u.newT)}</span><span class="m">11/02 · ${esc(d.dur)}</span>${TRASH}</div>${open?`<div class="rb2"><b>${esc(u.sumL)}</b><br>${esc(d.summary)}<br><br><b>${esc(u.todoL)}</b><br>${d.todos.map(x=>"☐ "+esc(x)).join("<br>")}</div>`:""}</div>` : "")
-      + d.older.map(o => `<div class="rec"><div class="rh">${CHEV}<span>${esc(o[0])}</span><span class="m">${esc(o[1])}</span>${TRASH}</div></div>`).join("");
-    const rc = $("#rc"); if (rc.dataset.h !== html) { rc.dataset.h = html; rc.innerHTML = html; }
-  }
- }
-];
-
-/* ------------------------------------------------------------------ chrome */
-function buildStepList() {
-  const u = U();
-  $("#steps").innerHTML = u.steps.map((s, i) => `<div class="step" data-i="${i}"><span class="num">${i+1}</span><div><div class="st-title">${esc(s[0])}</div><div class="st-sub">${esc(s[1])}</div><span class="tag ${KINDS[i]}">${esc(u.tags[KINDS[i]])}</span></div></div>`).join("");
-  $("#steps").querySelectorAll(".step").forEach(n => n.onclick = () => jump(+n.dataset.i));
+function sectionHTML(uc) {
+  return `<section class="sec" id="sec-${uc}">
+    <div class="sec-head"><span class="chip" data-r="chip"></span><h2 data-r="ucname"></h2><span class="pill" data-r="trainee"></span><p data-r="uctext"></p></div>
+    <div class="bar"><i data-r="prog"></i></div>
+    <div class="stage">
+      <aside class="card pipe"><div class="cap"><span data-r="pipeLbl"></span><span data-r="pipeCnt"></span></div><div data-r="steps"></div></aside>
+      <div class="card win">
+        <div class="win-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl" data-r="wTitle"></span><span class="lbl" data-r="wLbl"></span></div>
+        <div class="win-body" data-r="body"></div>
+        <div class="win-foot"><span class="n" data-r="fN"></span><span data-r="fText"></span></div>
+      </div>
+      <aside class="card log"><div class="cap"><span data-r="logLbl"></span></div><div class="log-list" data-r="log"></div></aside>
+    </div>
+  </section>`;
 }
-function applyText() {
+
+/* ------------------------------------------------------------------ one self-playing walkthrough */
+function createDemo(root, uc) {
+  const q = s => root.querySelector(s);
+  const r = n => q(`[data-r="${n}"]`);
+  const x = n => q(`[data-x="${n}"]`);
+  const D = () => DATA[uc][lang];
+  const body = r("body");
+  let si = 0, el = 0, logCount = 0, mounted = -1, visible = false;
+
+  const S = [
+   { // 1 choose
+    mount() {
+      const u = U();
+      body.innerHTML = `<div class="choose">${["inbound","outbound"].map(k => `<div class="chc" data-k="${k}"><span class="picked">${esc(u.picked)}</span><div class="ic">${k==="inbound"?ICO_IN:ICO_OUT}</div><b>${esc(k==="inbound"?u.inCall:u.outCall)}</b><span class="uc">${esc(u.ucName[k])}</span><p>${esc(u.ucText[k])}</p></div>`).join("")}</div>`;
+    },
+    update(t) { body.querySelectorAll(".chc").forEach(c => c.classList.toggle("sel", t > 1700 && c.dataset.k === uc)); }
+   },
+   { // 2 connect
+    mount() {
+      const u = U();
+      body.innerHTML = `<div class="phone-wrap"><div class="phone" data-x="ph"><div class="av">${ICO_USER}</div><div class="ph-lbl" data-x="pl"></div><div class="ph-who">${esc(uc==="inbound"?u.whoIn:u.whoOut)}</div><div class="ph-act" data-x="pa"></div><div class="ph-st" data-x="ps"></div></div></div>`;
+    },
+    update(t) {
+      const u = U(), ph = x("ph"), pl = x("pl"), pa = x("pa"), ps = x("ps");
+      let key, label, ring, status = "";
+      if (uc === "inbound") {
+        if (t < 2600) { key="a0"; label=u.incoming; ring=true; }
+        else if (t < 3500) { key="a1"; label=u.incoming; ring=true; }
+        else { key="a2"; label=u.connected; ring=false; status=u.connecting; }
+      } else {
+        if (t < 1300) { key="b0"; label=u.outLbl; ring=false; }
+        else if (t < 3300) { key="b1"; label=u.calling; ring=true; }
+        else { key="b2"; label=u.connected; ring=false; status=u.connecting; }
+      }
+      if (pa.dataset.k !== key) {
+        pa.dataset.k = key;
+        if (uc === "inbound") pa.innerHTML = key==="a2" ? "" : `<div class="ra"><button class="rb r" aria-label="${esc(u.decline)}">${ICO_HANG}</button><small>${esc(u.decline)}</small></div><div class="ra"><button class="rb g ${key==="a1"?"pressed":""}" aria-label="${esc(u.accept)}">${ICO_CALL}</button><small>${esc(u.accept)}</small></div>`;
+        else pa.innerHTML = key==="b2" ? "" : key==="b0" ? `<div class="ra"><button class="rb g" aria-label="${esc(u.callBtn)}">${ICO_CALL}</button><small>${esc(u.callBtn)}</small></div>` : `<div class="ra"><button class="rb r" aria-label="${esc(u.decline)}">${ICO_HANG}</button><small>${esc(u.decline)}</small></div>`;
+      }
+      ph.classList.toggle("ring", ring); pl.textContent = label; ps.textContent = status;
+    }
+   },
+   { // 3 live call: transcript + notes typed during the call
+    mount() {
+      const u = U();
+      body.innerHTML = `<div class="live-row"><span class="ldot"></span><b>${esc(u.live)}</b><span class="timer" data-x="tm">00:00</span></div>
+        <div class="wave" data-x="wv">${Array.from({length:28},(_,i)=>`<i style="animation-delay:${(i*0.07).toFixed(2)}s;animation-duration:${(0.7+(i%5)*0.15).toFixed(2)}s"></i>`).join("")}</div>
+        <div class="two live2">
+          <div class="box"><h4>${esc(u.transcript)}</h4><div class="pad tr" data-x="tr"></div></div>
+          <div class="box"><h4>${esc(u.notes)} <span class="saved" data-x="sv"></span></h4><div class="pad" data-x="nt"></div></div>
+        </div>`;
+    },
+    update(t) {
+      const d = D(), turns = d.turns, n = turns.length, slot = (DUR[2] - 4000) / n, tr = x("tr"), u = U();
+      x("tm").textContent = mmss(Math.min(t / DUR[2], 1) * 192);
+      let shown = 0, speaking = false;
+      turns.forEach((tn, i) => {
+        const st = 600 + i * slot; if (t < st) return; shown = i + 1;
+        let b = tr.children[i];
+        if (!b) { b = document.createElement("div"); b.className = "bub " + tn[0]; b.innerHTML = `<span class="who">${esc(tn[0]==="c"?u.aiC:u.you)}</span><div class="tx"></div>`; tr.appendChild(b); }
+        const full = tn[1], cur = typed(full, t - st, 48);
+        b.querySelector(".tx").textContent = cur;
+        if (cur.length < full.length) speaking = true;
+      });
+      while (tr.children.length > shown) tr.removeChild(tr.lastChild);
+      tr.scrollTop = tr.scrollHeight;
+      x("wv").classList.toggle("off", !speaking);
+      let html = "", typing = false, any = false;
+      d.notesLines.forEach(nl => {
+        const st = 600 + nl[0] * slot + 1700, cur = typed(nl[1], t - st, 40);
+        if (!cur.length) return; any = true;
+        const act = cur.length < nl[1].length; if (act) typing = true;
+        html += `<div class="nl"><span>•</span><span class="${act ? "caret" : ""}">${esc(cur)}</span></div>`;
+      });
+      const nt = x("nt"); if (nt.dataset.h !== html) { nt.dataset.h = html; nt.innerHTML = html; }
+      const sv = x("sv"); sv.textContent = !any ? "" : typing ? u.saving : u.saved; sv.classList.toggle("saving", typing);
+    }
+   },
+   { // 4 end
+    mount() {
+      const u = U();
+      body.innerHTML = `<div class="end"><div><div class="ck">${ICO_CHK}</div><h3>${esc(u.ended)}</h3><div class="dur">${esc(D().call)} · ${esc(D().dur)}</div><button class="bigbtn" data-x="eb">${esc(u.endBtn)}</button><small>${esc(u.endHint)}</small></div></div>`;
+    },
+    update(t) { x("eb").classList.toggle("pressed", t > 2800); }
+   },
+   { // 5 summary + to-do
+    mount() {
+      const u = U();
+      body.innerHTML = `<div class="two"><div class="box"><h4>${esc(u.acw)}</h4><div class="pad">
+          <div class="fld"><label>${esc(u.sum)}</label><div class="inp" data-x="su"></div></div>
+          <div class="fld" style="margin-top:14px"><label>${esc(u.todo)}</label><div data-x="td"></div></div>
+          <div class="savebar"><span data-x="ob"></span><button class="savebtn" data-x="sb">${esc(u.save)}</button></div></div></div>
+        <div class="box"><h4>${esc(u.notesCall)}</h4><div class="pad">${D().notesLines.map(l=>`<div class="nl"><span>•</span><span>${esc(l[1])}</span></div>`).join("")}</div></div></div>`;
+    },
+    update(t) {
+      const d = D(), full = d.summary, cps = 62, s0 = 500;
+      const cur = typed(full, t - s0, cps), su = x("su"), td = x("td");
+      su.textContent = cur; su.classList.toggle("caret", cur.length < full.length);
+      const per = lang === "ja" ? 0.45 : 1, typedMs = full.length / (cps * per) * 1000, t0 = s0 + typedMs + 400;
+      const nTodo = Math.max(0, Math.min(d.todos.length, Math.floor((t - t0) / 900) + 1));
+      if (td.children.length !== nTodo) td.innerHTML = d.todos.slice(0, nTodo).map(v => `<div class="todo"><span class="cb"></span><span>${esc(v)}</span></div>`).join("");
+      const tSave = t0 + d.todos.length * 900 + 500;
+      x("sb").classList.toggle("pressed", t > tSave && t < tSave + 600);
+      const ob = x("ob"), want = t > tSave + 300;
+      if (want && !ob.firstChild) ob.innerHTML = `<span class="okbanner">${esc(U().savedBy)}</span>`;
+      if (!want && ob.firstChild) ob.innerHTML = "";
+    }
+   },
+   { // 6 history
+    mount() { body.innerHTML = `<div class="sec-h">${esc(U().recent)}</div><div data-x="rc"></div>`; },
+    update(t) {
+      const u = U(), d = D(), open = t > 2600, show = t > 500;
+      const html = (show ? `<div class="rec new ${open?"open":""}"><div class="rh">${CHEV}<b>${esc((uc==="inbound"?u.inCall:u.outCall)+" · "+d.call)}</b><span class="newtag">${esc(u.newT)}</span><span class="m">11/02 · ${esc(d.dur)}</span>${TRASH}</div>${open?`<div class="rb2"><b>${esc(u.sumL)}</b><br>${esc(d.summary)}<br><br><b>${esc(u.todoL)}</b><br>${d.todos.map(v=>"☐ "+esc(v)).join("<br>")}</div>`:""}</div>` : "")
+        + d.older.map(o => `<div class="rec"><div class="rh">${CHEV}<span>${esc(o[0])}</span><span class="m">${esc(o[1])}</span>${TRASH}</div></div>`).join("");
+      const rc = x("rc"); if (rc.dataset.h !== html) { rc.dataset.h = html; rc.innerHTML = html; }
+    }
+   }
+  ];
+
+  function buildStepList() {
+    const u = U();
+    r("steps").innerHTML = u.steps.map((s, i) => `<div class="step" data-i="${i}"><span class="num">${i+1}</span><div><div class="st-title">${esc(s[0])}</div><div class="st-sub">${esc(s[1])}</div><span class="tag ${KINDS[i]}">${esc(u.tags[KINDS[i]])}</span></div></div>`).join("");
+    r("steps").querySelectorAll(".step").forEach(n => n.onclick = () => jump(+n.dataset.i));
+  }
+  function addLog(e) {
+    const li = document.createElement("div"); li.className = "li";
+    li.innerHTML = `<span class="tm">${e[0]}</span><span class="tx">${esc(e[1])}<span class="src ${e[2]}">${esc(SRC[lang][e[2]])}</span></span>`;
+    const list = r("log"); list.appendChild(li); list.scrollTop = list.scrollHeight;
+  }
+  function rebuildLog(upTo) {
+    r("log").innerHTML = ""; logCount = 0;
+    for (let i = 0; i < upTo; i++) LOGS[lang][uc][i].forEach(addLog);
+    logCount = 0;
+  }
+  function applyText() {
+    const u = U();
+    r("chip").textContent = uc === "inbound" ? u.inCall : u.outCall;
+    r("ucname").textContent = u.ucName[uc]; r("uctext").textContent = u.ucText[uc];
+    r("pipeLbl").textContent = u.pipeline; r("logLbl").textContent = u.log;
+    buildStepList(); mounted = -1;
+  }
+  function traineeCount() {
+    let n = 0; TRAINEE_STEPS.forEach(k => { if (k < si || (k === si && el / DUR[si] > 0.72)) n++; });
+    return n;
+  }
+  function render() {
+    const u = U();
+    if (mounted !== si) {
+      mounted = si; S[si].mount();
+      r("wTitle").textContent = u.win[si][0]; r("wLbl").textContent = u.win[si][1];
+      r("fN").textContent = String(si + 1).padStart(2, "0"); r("fText").textContent = u.cap[si];
+      r("steps").querySelectorAll(".step").forEach((n, i) => { n.classList.toggle("active", i === si); n.classList.toggle("done", i < si); });
+      r("pipeCnt").textContent = (si + 1) + " / " + S.length;
+      const a = r("steps").children[si]; if (a && a.scrollIntoView && window.innerWidth <= 1060) a.scrollIntoView({block:"nearest", inline:"center"});
+    }
+    S[si].update(el);
+    const l = LOGS[lang][uc][si];
+    while (logCount < l.length && el >= (logCount + 0.5) * (DUR[si] / (l.length + 0.5)) * 0.9) addLog(l[logCount++]);
+    r("prog").style.width = ((si + Math.min(el / DUR[si], 1)) / S.length * 100) + "%";
+    r("trainee").innerHTML = `${esc(u.trainee)} <b>${traineeCount()} / ${TRAINEE_STEPS.length}</b>`;
+  }
+  function jump(i) { si = Math.max(0, Math.min(i, S.length - 1)); el = 0; rebuildLog(si); mounted = -1; render(); }
+
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0.25 }).observe(q(".stage"));
+
+  return {
+    applyText, render,
+    restart() { jump(0); },
+    reset() { rebuildLog(si); mounted = -1; render(); },
+    seek(step, ms) { si = step; el = ms; rebuildLog(si); mounted = -1; render(); },
+    tick(dt) {
+      if (!paused && visible) {
+        el += dt * speed;
+        if (el >= DUR[si]) {
+          if (si < S.length - 1) { render(); si++; el = 0; logCount = 0; }
+          else el = DUR[si];
+        }
+      }
+      render();
+    }
+  };
+}
+
+/* ------------------------------------------------------------------ page */
+function applyGlobalText() {
   const u = U(); document.documentElement.lang = lang;
-  $("#h1").textContent = u.title; $("#desc").textContent = u.desc; $("#disc").textContent = u.disc;
+  $("#h1").textContent = u.title; $("#desc").textContent = u.desc;
   $("#restart").textContent = u.restart; $("#pause").textContent = paused ? u.resume : u.pause;
-  $("#pipeLbl").textContent = u.pipeline; $("#logLbl").textContent = u.log; $("#visit").textContent = u.visit;
-  $("#ucseg").querySelectorAll("button").forEach(b => { b.textContent = u[b.dataset.uc]; b.classList.toggle("on", b.dataset.uc === uc); });
-  $("#foot").textContent = u.foot; document.title = u.title + " – Role Play demo";
-  buildStepList(); mounted = -1;
+  $("#visit").textContent = u.visit; document.title = u.title + " – OneInbox";
+  $("#ucs").innerHTML = UCS.map(k => `<a class="ucc" href="#sec-${k}"><div class="ic">${k==="inbound"?ICO_IN:ICO_OUT}</div><div><b>${esc(k==="inbound"?u.inCall:u.outCall)}</b><span class="un">${esc(u.ucName[k])}</span><p>${esc(u.ucText[k])}</p></div></a>`).join("");
 }
-function rebuildLog(upTo) {
-  const list = $("#log"); list.innerHTML = ""; logCount = 0;
-  for (let i = 0; i < upTo; i++) LOGS[lang][uc][i].forEach(e => addLog(e));
-  logCount = 0;
-}
-function addLog(e) {
-  const li = document.createElement("div"); li.className = "li";
-  li.innerHTML = `<span class="tm">${e[0]}</span><span class="tx">${esc(e[1])}<span class="src ${e[2]}">${esc(SRC[lang][e[2]])}</span></span>`;
-  const list = $("#log"); list.appendChild(li); list.scrollTop = list.scrollHeight;
-}
-function jump(i) { si = Math.max(0, Math.min(i, S.length - 1)); el = 0; rebuildLog(si); mounted = -1; render(); }
-function restart() { jump(0); paused = false; $("#pause").textContent = U().pause; }
+$("#demos").innerHTML = UCS.map(sectionHTML).join("");
+UCS.forEach(k => { demos[k] = createDemo($("#sec-" + k), k); });
+function applyAll(rebuild) { applyGlobalText(); UCS.forEach(k => { demos[k].applyText(); if (rebuild) demos[k].reset(); else demos[k].render(); }); }
 
-function traineeCount() {
-  let n = 0; TRAINEE_STEPS.forEach(k => { if (k < si || (k === si && el / DUR[si] > 0.72)) n++; });
-  return n;
-}
-function render() {
-  const u = U();
-  if (mounted !== si) {
-    mounted = si; S[si].mount();
-    $("#wTitle").textContent = u.win[si][0]; $("#wLbl").textContent = u.win[si][1];
-    $("#fN").textContent = String(si + 1).padStart(2, "0"); $("#fText").textContent = u.cap[si];
-    if (si === 1 && uc === "outbound") { /* caption adjusted by text */ }
-    document.querySelectorAll(".step").forEach((n, i) => { n.classList.toggle("active", i === si); n.classList.toggle("done", i < si); });
-    $("#pipeCnt").textContent = (si + 1) + " / " + S.length;
-    const a = $("#steps").children[si]; if (a && a.scrollIntoView && window.innerWidth <= 1060) a.scrollIntoView({block:"nearest", inline:"center"});
-  }
-  S[si].update(el);
-  const l = LOGS[lang][uc][si];
-  while (logCount < l.length && el >= (logCount + 0.5) * (DUR[si] / (l.length + 0.5)) * 0.9) addLog(l[logCount++]);
-  $("#prog").style.width = ((si + Math.min(el / DUR[si], 1)) / S.length * 100) + "%";
-  $("#trainee").innerHTML = `${esc(u.trainee)} <b>${traineeCount()} / ${TRAINEE_STEPS.length}</b>`;
-}
-function tick(now) {
-  const dt = Math.min(now - last, 100); last = now;
-  if (!paused) {
-    el += dt * speed;
-    if (el >= DUR[si]) {
-      if (si < S.length - 1) { render(); si++; el = 0; logCount = 0; }
-      else { el = DUR[si]; }
-    }
-  }
-  render(); requestAnimationFrame(tick);
-}
-
-/* ------------------------------------------------------------------ events */
-$("#lang").onchange = e => { lang = e.target.value; applyText(); rebuildLog(si); render(); };
-$("#ucseg").onclick = e => { const b = e.target.closest("button"); if (!b) return; uc = b.dataset.uc; applyText(); restart(); };
-$("#spdseg").onclick = e => { const b = e.target.closest("button"); if (!b) return; speed = +b.dataset.s; $("#spdseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); };
-$("#restart").onclick = restart;
+$("#lang").onchange = e => { lang = e.target.value; applyAll(true); };
+$("#spdseg").onclick = e => { const b = e.target.closest("button"); if (!b) return; speed = +b.dataset.s; $("#spdseg").querySelectorAll("button").forEach(v => v.classList.toggle("on", v === b)); };
+$("#restart").onclick = () => { UCS.forEach(k => demos[k].restart()); paused = false; $("#pause").textContent = U().pause; };
 $("#pause").onclick = () => { paused = !paused; $("#pause").textContent = paused ? U().resume : U().pause; };
 $("#theme").onclick = () => {
   const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   document.documentElement.dataset.theme = cur === "dark" ? "light" : "dark";
 };
-try { const q = new URLSearchParams(location.search); if (q.get("lang") === "ja") { lang = "ja"; $("#lang").value = "ja"; } if (q.get("uc") === "outbound") uc = "outbound"; } catch (e) {}
+try { const qs = new URLSearchParams(location.search); if (qs.get("lang") === "ja") { lang = "ja"; $("#lang").value = "ja"; } } catch (e) {}
 
-// small hook so the walkthrough can be inspected frame by frame
-window.__demo = { seek(step, ms, o = {}) { if (o.lang) { lang = o.lang; $("#lang").value = lang; } if (o.uc) uc = o.uc; applyText(); si = step; el = ms; rebuildLog(si); mounted = -1; paused = true; render(); } };
+// lets the walkthroughs be inspected frame by frame
+window.__demo = { seek(uc, step, ms, o = {}) { if (o.lang) { lang = o.lang; $("#lang").value = lang; applyAll(false); } paused = true; demos[uc].seek(step, ms); } };
 
-applyText(); rebuildLog(0); render(); requestAnimationFrame(tick);
+applyAll(true);
+let last = performance.now();
+(function loop(now) { const dt = Math.min(now - last, 100); last = now; UCS.forEach(k => demos[k].tick(dt)); requestAnimationFrame(loop); })(last);
 })();
 </script>
 </body>

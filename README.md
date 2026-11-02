@@ -1,14 +1,12 @@
-# Role Play: visual demo
+# Role Play: demo
 
-A self-playing, **simulated** walkthrough of the Role Play voice-AI training use case, for prospects who want to *see* the product before a contract. It is not a working product.
+A self-playing walkthrough of the Role Play voice-AI training use cases. A trainee plays the operator (OP) and practises calls with an AI agent that plays the customer.
 
-- **What it shows:** a trainee plays the operator (OP) and practises one call with an AI agent that plays the customer, in six steps: choose a call, phone connects, live call (transcript and the trainee's notes typed during the call), call ends, the trainee's summary of how the practice call went plus a to-do list, saved to history.
-- **Two use cases:** Inbound (shareholder benefits help desk) and Outbound (internet / fiber sales). Switch between them at the top.
-- **Languages:** English and Japanese (switcher in the header).
-- **Controls:** speed (0.6x / 1x / 1.8x), restart, pause, and click any step in the list to jump to it. Light / dark theme.
-- **No backend, no microphone, no AI calls.** Everything is scripted sample data. Nothing here is a real call.
-
-The full working project (live AI voice customers, the client's own scripts and use cases) is built after contract.
+- **Both use cases on one page:** Inbound (shareholder benefits help desk) and Outbound (internet / fiber sales). Each has its own walkthrough; the lower one starts when you scroll to it.
+- **Six steps each:** choose a call, phone connects, live call (transcript and the trainee's notes typed during the call), call ends, the trainee's summary of how the practice call went plus a to-do list, saved to history.
+- **Languages:** English and Japanese (switcher in the header). Light and dark theme.
+- **Controls:** speed (0.6x / 1x / 1.8x), restart and pause apply to both walkthroughs; click any step to jump to it.
+- **No backend, no microphone, no AI calls:** everything is scripted.
 
 ## Run locally
 
@@ -16,14 +14,14 @@ The full working project (live AI voice customers, the client's own scripts and 
 npx serve .
 ```
 
-Static site: `index.html` only, no build step. Deploy it on any static host (publish directory `.`).
+Static site: `index.html` only, no build step. Deploy on any static host (publish directory `.`).
 
 ## Edit the content
 
-All text and the sample call are in `index.html`:
+All text and the sample calls are in `index.html`:
 - `UI` : interface text (English / Japanese)
 - `DATA` : the sample transcript, notes, summary and to-dos for each use case
 - `LOGS` : the activity-log entries
 - `DUR` : how long each step lasts (ms)
 
-Query parameters: `?lang=ja` and `?uc=outbound` open the demo in Japanese or on the outbound use case.
+`?lang=ja` opens the page in Japanese.
